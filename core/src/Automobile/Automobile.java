@@ -15,7 +15,7 @@ public class Automobile extends Sprite {
     private static final int start_x_up_1 = 460;
     private static final int start_x_up_2 = 415;
 
-    private static final int start_y_up = -65;
+    private static final int start_y_up = -60;
 
 
     private static final int start_x_down = 305;

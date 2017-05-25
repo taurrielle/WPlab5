@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.MyGdxGame;
 
 import java.sql.Array;
+import java.util.Random;
 
 import Automobile.Automobile;
 import Automobile.Semafor;
@@ -23,7 +24,8 @@ import Automobile.Pedestrian;
 public class GameDraw implements Screen {
 
     private MyGdxGame game;
-    private long startTime_1 = 0, startTime_2 = 0;
+    private long startTime_1 = 0, startTime_2 = 0, startTime_3 = 0;
+    private static final String[] position = {"up", "down", "left", "right"};
 
     private Texture road;
 
@@ -57,10 +59,17 @@ public class GameDraw implements Screen {
         automobile[2] = new Automobile("car.png", "left");
         automobile[3] = new Automobile("car.png", "right");
 
-        pedestrian[0] = new Pedestrian("1.png", "up");
+        for (int i = 0; i < 4; i++){
+            generatePedestrians(i);
+        }
 
+    }
 
-
+    public void generatePedestrians(int i){
+        Random random = new Random();
+        int index = random.nextInt(position.length);
+        int speed = random.nextInt(2) + 1;
+        pedestrian[i] = new Pedestrian("1.png", position[index], speed);
     }
 
     @Override
@@ -111,9 +120,22 @@ public class GameDraw implements Screen {
             automobile[i].draw(game.getBatch());
         }
 
-        pedestrian[0].move(semafor[0], semafor[2]);
-        pedestrian[0].draw(game.getBatch());
+        //pedestrian
+        if (startTime_3 > 15) {
+            for (int i=0; i < 4; i++) {
+                pedestrian[i].walk();
+                startTime_3 = 0;
+            }
+        }
+        startTime_3 += 1;
 
+        for(int i=0; i < 4; i++) {
+            if(pedestrian[i].deletePedestrian == true){
+                generatePedestrians(i);
+            }
+            pedestrian[i].move(semafor[0], semafor[2]);
+            pedestrian[i].draw(game.getBatch());
+        }
 
         game.getBatch().end();
     }
