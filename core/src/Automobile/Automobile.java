@@ -44,6 +44,7 @@ public class Automobile extends Sprite {
     private float start_x, start_y;
     public float speed = 10;
     public int counter_car = 0;
+    public boolean specialCarFlag = false;
 
 
     public Automobile(){
@@ -91,66 +92,63 @@ public class Automobile extends Sprite {
 
     public void move(Semafor semafor_1, Semafor semafor_2) {
 
+        if(!specialCarFlag) {
+            if (direction == "up") {
 
-        if (direction == "up") {
+                if (this.getY() != -25 && semafor_1.color == "red" ||
+                        semafor_1.color == "green" ||
+                        this.getY() != -25 && semafor_1.color == "yellow") {
+                    this.rotate();
+                    if (!this.rotation) {
+                        this.setPosition(this.getX(), this.getY() + speed);
 
-            if (this.getY() != -25 && semafor_1.color == "red" ||
-                    semafor_1.color == "green" ||
-                    this.getY() != -25 && semafor_1.color == "yellow") {
-                this.rotate();
-                if (!this.rotation) {
-                    this.setPosition(this.getX(), this.getY() + speed);
+                        if (this.getY() > 500) {
+                            this.setX(random.nextBoolean() ? start_x_up_1 : start_x_up_2);
+                            this.setY(start_y_up - 100 * counter_car);
+                        }
+                    }
+                }
+            } else if (direction == "down") {
 
-                    if (this.getY() > 500) {
-                        this.setX(random.nextBoolean() ? start_x_up_1 : start_x_up_2);
-                        this.setY(start_y_up - 100 * counter_car);
+                if ((this.getY() != 440 && semafor_1.color == "red") ||
+                        semafor_1.color == "green" ||
+                        this.getY() != 440 && semafor_1.color == "yellow") {
+
+                    this.rotate();
+                    if (!this.rotation) {
+                        this.setPosition(this.getX(), this.getY() - speed);
+
+                        if (this.getY() < -70) {
+                            this.setX(random.nextBoolean() ? start_x_down_1 : start_x_down_2);
+                            this.setY(start_y_down + 100 * counter_car);
+                        }
+                    }
+                }
+            } else if (direction == "left") {
+                if (this.getX() != 155 & semafor_2.color == "red" ||
+                        semafor_2.color == "green" ||
+                        this.getX() != 155 && semafor_2.color == "yellow") {
+
+                    this.setPosition(this.getX() + speed, this.getY());
+
+                    if (this.getX() > 810) {
+                        this.setY(random.nextBoolean() ? start_y_left_1 : start_y_left_2);
+                        this.setX(start_x_left - 100 * counter_car);
+                    }
+                }
+            } else if (direction == "right") {
+                if (this.getX() != 625 & semafor_2.color == "red" ||
+                        semafor_2.color == "green" ||
+                        this.getX() != 625 && semafor_2.color == "yellow") {
+
+                    this.setPosition(this.getX() - speed, this.getY());
+                    if (this.getX() < -90) {
+                        this.setY(random.nextBoolean() ? start_y_right_1 : start_y_right_2);
+                        this.setX(start_x_right + 100 * counter_car);
                     }
                 }
             }
         }
-        else if (direction == "down"){
-
-            if ((this.getY() != 440 && semafor_1.color == "red") ||
-                    semafor_1.color == "green" ||
-                    this.getY() != 440 &&semafor_1.color == "yellow") {
-
-                this.rotate();
-                if (!this.rotation) {
-                    this.setPosition(this.getX(), this.getY() - speed);
-
-                    if (this.getY() < -70) {
-                        this.setX(random.nextBoolean() ? start_x_down_1 : start_x_down_2);
-                        this.setY(start_y_down + 100 * counter_car);
-                    }
-                }
-            }
-        }
-        else if (direction == "left"){
-            if (this.getX() != 155 & semafor_2.color == "red" ||
-                    semafor_2.color == "green" ||
-                    this.getX() != 155 && semafor_2.color == "yellow") {
-
-                this.setPosition(this.getX() + speed, this.getY());
-
-                if (this.getX() > 810){
-                    this.setY(random.nextBoolean() ? start_y_left_1 : start_y_left_2);
-                    this.setX(start_x_left - 100 * counter_car);
-                }
-            }
-        }
-        else if (direction == "right"){
-            if (this.getX() != 625 & semafor_2.color == "red" ||
-                    semafor_2.color == "green" ||
-                    this.getX() != 625 && semafor_2.color == "yellow") {
-
-                this.setPosition(this.getX() - speed, this.getY());
-                if (this.getX() < -90){
-                    this.setY(random.nextBoolean() ? start_y_right_1 : start_y_right_2);
-                    this.setX(start_x_right + 100 * counter_car);
-                }
-            }
-        }
-
     }
 
     public void rotate (){

@@ -13,9 +13,9 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class Pedestrian extends Sprite {
 
     private static final int start_x_up_right = 550;
-    private static final int start_x_up_left = 250;
+    private static final int start_x_up_left = 260;
 
-    private static final int start_y_up = -5;
+    private static final int start_y_up = -10;
 
     private static final int start_x_down_right = 520;
     private static final int start_x_down_left = 230;
@@ -34,17 +34,19 @@ public class Pedestrian extends Sprite {
     private static final int start_x_right = 800;
 
 
-    private String direction;
-    private float orientation;
-    private float start_x, start_y;
+    public String direction;
+    public float orientation;
+    public float start_x, start_y;
     public float speed = 1;
 
-    private int view = 1;
-    private boolean walkFlag = true;
+    public int view = 1;
+    public boolean walkFlag = true;
     public boolean deletePedestrian = false;
+    public boolean specialCarFlag = false;
+    //public int index = 1;
 
 
-    public Pedestrian (String name, String direction, int speed){
+    public Pedestrian (String name, String direction, int speed, int index){
         super(new Texture(name));
 
         this.speed = speed;
@@ -53,21 +55,21 @@ public class Pedestrian extends Sprite {
         this.direction = direction;
         if (direction == "up"){
             start_x = random.nextBoolean() ? start_x_up_right : start_x_up_left;
-            start_y = start_y_up;
+            start_y = start_y_up - index * 50;
             orientation = 0;
         }
         else if (direction == "down"){
             start_x = random.nextBoolean() ? start_x_down_right : start_x_down_left;
-            start_y = start_y_down;
+            start_y = start_y_down + index * 50;
             orientation = 180;
         }
         else if (direction == "left"){
-            start_x = start_x_left;
+            start_x = start_x_left - index * 50;
             start_y = random.nextBoolean() ? start_y_left_upper : start_y_left_lower;
             orientation = -90;
         }
         else if (direction == "right"){
-            start_x = start_x_left;
+            start_x = start_x_right + index * 50;
             start_y = random.nextBoolean() ? start_y_right_upper : start_y_right_lower;
             orientation = 90;
         }
@@ -79,73 +81,64 @@ public class Pedestrian extends Sprite {
     }
 
     public void move(Semafor semafor_1, Semafor semafor_2) {
+        //walkFlag = true;
 
+            if (direction == "up") {
 
-        if (direction == "up") {
+                if (this.getY() < 110 || this.getY() > 113 && semafor_1.color == "red" || semafor_1.color == "green" ||
+                        this.getY() < 110 || this.getY() > 113 && semafor_1.color == "yellow" && !specialCarFlag) {
 
-            if (this.getY() != 110 && semafor_1.color == "red" || semafor_1.color == "green" ||
-                    this.getY() != 110 && semafor_1.color == "yellow") {
-
-                    walkFlag = true;
+                    //walkFlag = true;
 
                     this.setPosition(this.getX(), this.getY() + speed);
 
                     if (this.getY() > 500) {
                         this.deletePedestrian = true;
                     }
-            }
-            else{
-                walkFlag = false;
-            }
-        }
+                } else {
+                    walkFlag = false;
+                }
+            } else if (direction == "down") {
 
-        else if (direction == "down"){
+                if ((this.getY() < 340 || this.getY() > 343 && semafor_1.color == "red") || semafor_1.color == "green" ||
+                        this.getY() < 340 || this.getY() > 343 && semafor_1.color == "yellow" && !specialCarFlag) {
 
-            if ((this.getY() != 340 && semafor_1.color == "red") || semafor_1.color == "green" ||
-                    this.getY() != 340 &&semafor_1.color == "yellow") {
-
-                    walkFlag = true;
+                    // walkFlag = true;
                     this.setPosition(this.getX(), this.getY() - speed);
 
                     if (this.getY() < -70) {
                         this.deletePedestrian = true;
                     }
+                } else {
+                    walkFlag = false;
                 }
-            else{
-                walkFlag = false;
-            }
-        }
+            } else if (direction == "left") {
+                if (this.getX() < 270 || this.getX() > 273 && semafor_2.color == "red" || semafor_2.color == "green" ||
+                        this.getX() < 270 || this.getX() > 273 && semafor_2.color == "yellow" && !specialCarFlag) {
 
-        else if (direction == "left"){
-            if (this.getX() != 270 & semafor_2.color == "red" || semafor_2.color == "green" ||
-                    this.getX() != 270 && semafor_2.color == "yellow") {
+                    //walkFlag = true;
+                    this.setPosition(this.getX() + speed, this.getY());
 
-                walkFlag = true;
-                this.setPosition(this.getX() + speed, this.getY());
-
-                if (this.getX() > 810){
-                    this.deletePedestrian = true;
+                    if (this.getX() > 810) {
+                        this.deletePedestrian = true;
+                    }
+                } else {
+                    walkFlag = false;
                 }
-            }
-            else{
-                walkFlag = false;
-            }
-        }
-        else if (direction == "right"){
-            if (this.getX() != 500 & semafor_2.color == "red" || semafor_2.color == "green" ||
-                    this.getX() != 500 && semafor_2.color == "yellow") {
+            } else if (direction == "right") {
+                if (this.getX() < 500 || this.getX() > 503 && semafor_2.color == "red" || semafor_2.color == "green" ||
+                        this.getX() < 500 || this.getX() > 503 && semafor_2.color == "yellow" && !specialCarFlag) {
 
-                walkFlag = true;
-                this.setPosition(this.getX() - speed, this.getY());
-                if (this.getX() < -90){
-                    this.deletePedestrian = true;
+                    //walkFlag = true;
+                    this.setPosition(this.getX() - speed, this.getY());
+                    if (this.getX() < -90) {
+                        this.deletePedestrian = true;
+                    }
+                } else {
+                    walkFlag = false;
                 }
-            }
-            else{
-                walkFlag = false;
-            }
 
-        }
+            }
 
     }
 
